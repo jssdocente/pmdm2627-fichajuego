@@ -7,10 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.pmdm.fichajuego.model.juegoEjemplo
+import com.pmdm.fichajuego.ui.ficha.FichaJuego
 import com.pmdm.fichajuego.ui.theme.FichaJuegoTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,28 +20,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             FichaJuegoTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+                    FichaJuego(
+                        juego = juegoEjemplo,
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .padding(16.dp)
                     )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hola $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FichaJuegoTheme {
-        Greeting("Android")
     }
 }

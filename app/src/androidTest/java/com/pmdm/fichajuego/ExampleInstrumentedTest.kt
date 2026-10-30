@@ -16,7 +16,7 @@ class ExampleInstrumentedTest {
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Test
-    fun greeting_isDisplayed() {
-        composeTestRule.onNodeWithText("Hola Android!").assertExists()
+    fun fichaMuestraElTitulo() {
+        composeTestRule.onNodeWithText("Hollow Knight").assertExists()
     }
 }
