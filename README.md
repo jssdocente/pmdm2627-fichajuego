@@ -11,6 +11,7 @@ Cada sesión tiene dos *tags*: el punto de partida (`-inicio`) y el resultado al
 | Sesión | Inicio | Fin |
 | :--- | :--- | :--- |
 | 2.01 · Primer contacto con Compose | `s2.01-inicio` | `s2.01-fin` |
+| 2.02 · Estado y state hoisting | `s2.02-inicio` | `s2.02-fin` |
 
 ```bash
 git clone <url-del-repositorio> fichajuego
