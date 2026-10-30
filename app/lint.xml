@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Las versiones de AGP, Gradle y librerías están fijadas a propósito para que el
+     proyecto funcione con IntelliJ IDEA (AGP 9.1) y compileSdk 37. Se ocultan los avisos
+     de "hay una versión más nueva" para evitar actualizaciones que rompan el proyecto. -->
+<lint>
+    <issue id="AndroidGradlePluginVersion" severity="ignore" />
+    <issue id="GradleDependency" severity="ignore" />
+    <issue id="OldTargetApi" severity="ignore" />
+</lint>
