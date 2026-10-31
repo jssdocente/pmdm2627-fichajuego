@@ -2,6 +2,9 @@
     <string name="app_name">Ficha de juego</string>
 
     <!-- Biblioteca -->
+    <string name="titulo_biblioteca">Mi biblioteca</string>
+    <string name="ordenar_por_nota">Ordenar por nota</string>
+    <string name="quitar_orden">Quitar orden por nota</string>
     <string name="partidas_total">Partidas en total: %1$d</string>
 
     <!-- Ficha -->

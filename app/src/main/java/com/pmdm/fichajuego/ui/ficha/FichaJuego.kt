@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
@@ -28,7 +28,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pmdm.fichajuego.R
@@ -41,7 +40,7 @@ import com.pmdm.fichajuego.ui.theme.FichaJuegoTheme
  * Ficha completa de un juego. Es *stateless*: recibe el estado como parámetros
  * (estado hacia abajo) y avisa de los clics con lambdas (eventos hacia arriba).
  *
- * Árbol: Column → [Portada (Box), Text, Text, FilaValoracion (Row), FilaPartidas (Row)]
+ * Árbol: ElevatedCard → Column → [Portada (Box), Text, Text, FilaValoracion (Row), FilaPartidas (Row)]
  */
 @Composable
 fun FichaJuego(
@@ -52,31 +51,29 @@ fun FichaJuego(
     onSumarPartida: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Portada(portada = juego.portada, titulo = juego.titulo, esNovedad = juego.esNovedad)
-        Text(
-            text = juego.titulo,
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = stringResource(R.string.genero_anio, juego.genero, juego.anio),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        FilaValoracion(
-            nota = juego.nota,
-            esFavorito = esFavorito,
-            onFavoritoClick = onFavoritoClick
-        )
-        FilaPartidas(partidas = partidas, onSumarPartida = onSumarPartida)
+    // ElevatedCard toma del tema el color (surfaceContainerLow), la sombra y la forma (shapes.medium)
+    ElevatedCard(modifier = modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Portada(portada = juego.portada, titulo = juego.titulo, esNovedad = juego.esNovedad)
+            Text(
+                text = juego.titulo,
+                style = MaterialTheme.typography.headlineSmall // negrita definida en Type.kt
+            )
+            Text(
+                text = stringResource(R.string.genero_anio, juego.genero, juego.anio),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            FilaValoracion(
+                nota = juego.nota,
+                esFavorito = esFavorito,
+                onFavoritoClick = onFavoritoClick
+            )
+            FilaPartidas(partidas = partidas, onSumarPartida = onSumarPartida)
+        }
     }
 }
 
@@ -95,7 +92,7 @@ fun Portada(
         modifier = modifier
             .fillMaxWidth()
             .height(160.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .clip(MaterialTheme.shapes.small)
     ) {
         Image(
             painter = painterResource(portada),
@@ -112,7 +109,7 @@ fun Portada(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(8.dp)
-                    .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.tertiary, MaterialTheme.shapes.small)
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             )
         }

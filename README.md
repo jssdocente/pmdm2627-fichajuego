@@ -1,6 +1,6 @@
-# FichaJuego · Proyecto de clase de la UT2 (PMDM 26/27)
+# FichaJuego · Proyecto de clase de PMDM 26/27 (UT2 y UT3)
 
-Proyecto que construimos **en clase, sesión a sesión**, durante la UT2: una ficha de videojuego hecha con Jetpack Compose.
+Proyecto que construimos **en clase, sesión a sesión**, durante la UT2 y la UT3: una biblioteca de videojuegos hecha con Jetpack Compose.
 
 Parte de la plantilla `ProyectoComposeBase` del curso (IntelliJ IDEA 2026.2, AGP 9.1.1, compileSdk 37). Los requisitos, la configuración del SDK y del JDK, y los errores frecuentes son los mismos que los de la plantilla: consulta su README en el curso.
 
@@ -13,6 +13,7 @@ Cada sesión tiene dos *tags*: el punto de partida (`-inicio`) y el resultado al
 | 2.01 · Primer contacto con Compose | `s2.01-inicio` | `s2.01-fin` |
 | 2.02 · Estado y state hoisting | `s2.02-inicio` | `s2.02-fin` |
 | 2.03 · Imágenes, iconos y recursos (estudio autónomo) | `s2.03-inicio` | `s2.03-fin` |
+| 3.01 · Tema de Material 3, Scaffold y listas | `s3.01-inicio` | `s3.01-fin` |
 
 ```bash
 git clone <url-del-repositorio> fichajuego

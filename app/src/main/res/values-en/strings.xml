@@ -2,6 +2,9 @@
     <string name="app_name">Game card</string>
 
     <!-- Biblioteca -->
+    <string name="titulo_biblioteca">My library</string>
+    <string name="ordenar_por_nota">Sort by rating</string>
+    <string name="quitar_orden">Remove rating sort</string>
     <string name="partidas_total">Total games played: %1$d</string>
 
     <!-- Ficha -->
