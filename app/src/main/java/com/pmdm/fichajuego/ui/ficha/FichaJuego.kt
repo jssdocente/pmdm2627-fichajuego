@@ -1,27 +1,37 @@
 package com.pmdm.fichajuego.ui.ficha
 
 import android.content.res.Configuration
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.pmdm.fichajuego.R
 import com.pmdm.fichajuego.model.Juego
 import com.pmdm.fichajuego.model.juegoEjemplo
 import com.pmdm.fichajuego.model.otroJuego
@@ -50,14 +60,14 @@ fun FichaJuego(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Portada(titulo = juego.titulo, esNovedad = juego.esNovedad)
+        Portada(portada = juego.portada, titulo = juego.titulo, esNovedad = juego.esNovedad)
         Text(
             text = juego.titulo,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "${juego.genero} · ${juego.anio}",
+            text = stringResource(R.string.genero_anio, juego.genero, juego.anio),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -71,28 +81,32 @@ fun FichaJuego(
 }
 
 /**
- * Portada provisional: un rectángulo de color con las iniciales del juego.
+ * Portada del juego: una imagen de res/drawable recortada para llenar el hueco.
  * La insignia «NUEVO» se dibuja encima gracias a Box.
  */
 @Composable
-fun Portada(titulo: String, esNovedad: Boolean, modifier: Modifier = Modifier) {
+fun Portada(
+    @DrawableRes portada: Int,
+    titulo: String,
+    esNovedad: Boolean,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(160.dp)
             .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.primary)
     ) {
-        Text(
-            text = iniciales(titulo),
-            style = MaterialTheme.typography.displayMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.align(Alignment.Center)
+        Image(
+            painter = painterResource(portada),
+            contentDescription = stringResource(R.string.portada_de, titulo),
+            contentScale = ContentScale.Crop, // llena el hueco y recorta lo que sobra
+            modifier = Modifier.fillMaxSize()
         )
         // UI = f(datos): la insignia solo existe si el juego es una novedad
         if (esNovedad) {
             Text(
-                text = "NUEVO",
+                text = stringResource(R.string.insignia_nuevo),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onTertiary,
                 modifier = Modifier
@@ -119,10 +133,27 @@ fun FilaValoracion(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "★ $nota", style = MaterialTheme.typography.titleMedium)
+        // Icono decorativo: el número ya lo dice todo, la descripción la leería dos veces
+        Icon(
+            painter = painterResource(R.drawable.ic_star),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.tertiary,
+            modifier = Modifier.size(20.dp)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(text = "$nota", style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.weight(1f))
-        TextButton(onClick = onFavoritoClick) {
-            Text(text = if (esFavorito) "♥ Favorito" else "♡ Favorito")
+        IconToggleButton(checked = esFavorito, onCheckedChange = { onFavoritoClick() }) {
+            Icon(
+                painter = painterResource(
+                    if (esFavorito) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                ),
+                contentDescription = stringResource(
+                    if (esFavorito) R.string.quitar_favorito else R.string.marcar_favorito
+                ),
+                tint = if (esFavorito) MaterialTheme.colorScheme.error
+                else MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
@@ -136,16 +167,16 @@ fun FilaPartidas(partidas: Int, onSumarPartida: () -> Unit, modifier: Modifier =
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "Partidas jugadas: $partidas", style = MaterialTheme.typography.bodyLarge)
+        Text(
+            text = stringResource(R.string.partidas_jugadas, partidas),
+            style = MaterialTheme.typography.bodyLarge
+        )
         Spacer(modifier = Modifier.weight(1f))
         FilledTonalButton(onClick = onSumarPartida) {
-            Text("+1")
+            Text(stringResource(R.string.sumar_partida))
         }
     }
 }
-
-private fun iniciales(titulo: String): String =
-    titulo.split(" ").take(2).joinToString("") { it.first().uppercase() }
 
 @Preview(name = "Claro", showBackground = true)
 @Composable

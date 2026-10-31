@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Ficha de juego</string>
+
+    <!-- Biblioteca -->
+    <string name="partidas_total">Partidas en total: %1$d</string>
+
+    <!-- Ficha -->
+    <string name="insignia_nuevo">NUEVO</string>
+    <string name="genero_anio">%1$s · %2$d</string>
+    <string name="portada_de">Portada de %1$s</string>
+    <string name="valoracion">Valoración</string>
+    <string name="marcar_favorito">Marcar como favorito</string>
+    <string name="quitar_favorito">Quitar de favoritos</string>
+    <string name="partidas_jugadas">Partidas jugadas: %1$d</string>
+    <string name="sumar_partida">+1</string>
 </resources>

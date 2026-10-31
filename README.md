@@ -12,6 +12,7 @@ Cada sesión tiene dos *tags*: el punto de partida (`-inicio`) y el resultado al
 | :--- | :--- | :--- |
 | 2.01 · Primer contacto con Compose | `s2.01-inicio` | `s2.01-fin` |
 | 2.02 · Estado y state hoisting | `s2.02-inicio` | `s2.02-fin` |
+| 2.03 · Imágenes, iconos y recursos (estudio autónomo) | `s2.03-inicio` | `s2.03-fin` |
 
 ```bash
 git clone <url-del-repositorio> fichajuego
@@ -23,3 +24,8 @@ git switch -c mi-trabajo          # crea tu rama para trabajar sobre él
 Si faltaste a clase, haz `git checkout s2.01-fin` para ver cómo quedó el proyecto y continúa desde ahí.
 
 ¿No usas Git? En GitHub, en *Tags*, cada tag se puede descargar como `.zip`.
+
+## Créditos
+
+- Ilustraciones de portada (`res/drawable/img_portada_*.jpg`): originales del curso, con la misma licencia que los apuntes (CC BY-NC-SA). No son las carátulas oficiales de los juegos.
+- Iconos (`res/drawable/ic_*.xml`): [Material Symbols](https://fonts.google.com/icons) de Google, licencia Apache 2.0.

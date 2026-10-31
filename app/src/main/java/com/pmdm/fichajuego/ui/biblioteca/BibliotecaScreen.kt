@@ -13,8 +13,10 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.pmdm.fichajuego.R
 import com.pmdm.fichajuego.model.juegoEjemplo
 import com.pmdm.fichajuego.model.otroJuego
 import com.pmdm.fichajuego.ui.ficha.FichaJuegoScreen
@@ -36,7 +38,7 @@ fun BibliotecaScreen(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "Partidas en total: ${partidasHollow + partidasStardew}",
+            text = stringResource(R.string.partidas_total, partidasHollow + partidasStardew),
             style = MaterialTheme.typography.titleLarge
         )
         FichaJuegoScreen(

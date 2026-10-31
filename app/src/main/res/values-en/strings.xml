@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Game card</string>
+
+    <!-- Biblioteca -->
+    <string name="partidas_total">Total games played: %1$d</string>
+
+    <!-- Ficha -->
+    <string name="insignia_nuevo">NEW</string>
+    <string name="genero_anio">%1$s · %2$d</string>
+    <string name="portada_de">%1$s cover</string>
+    <string name="valoracion">Rating</string>
+    <string name="marcar_favorito">Mark as favorite</string>
+    <string name="quitar_favorito">Remove from favorites</string>
+    <string name="partidas_jugadas">Games played: %1$d</string>
+    <string name="sumar_partida">+1</string>
+</resources>
