@@ -16,4 +16,22 @@
     <string name="quitar_favorito">Remove from favorites</string>
     <string name="partidas_jugadas">Games played: %1$d</string>
     <string name="sumar_partida">+1</string>
+
+    <!-- Nuevo juego -->
+    <string name="anadir_juego">Add game</string>
+    <string name="titulo_nuevo_juego">New game</string>
+    <string name="campo_titulo">Title</string>
+    <string name="campo_genero">Genre</string>
+    <string name="campo_anio">Release year</string>
+    <string name="contador_caracteres">%1$d/%2$d</string>
+    <string name="error_anio">Enter a year between %1$d and %2$d</string>
+    <string name="ayuda_anio">For example, 2019</string>
+    <string name="campo_nota">Rating: %1$.1f</string>
+    <string name="cancelar">Cancel</string>
+
+    <!-- Reiniciar partidas -->
+    <string name="reiniciar_partidas">Reset games played</string>
+    <string name="reiniciar_titulo">Reset games played?</string>
+    <string name="reiniciar_texto">Every counter will go back to zero. This can\'t be undone.</string>
+    <string name="reiniciar_confirmar">Reset</string>
 </resources>
