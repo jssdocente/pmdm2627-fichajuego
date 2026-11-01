@@ -2,6 +2,10 @@ package com.pmdm.fichajuego.ui.ficha
 
 import android.content.res.Configuration
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,9 +26,11 @@ import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -144,6 +150,18 @@ fun FilaValoracion(
         Spacer(modifier = Modifier.width(4.dp))
         Text(text = "$nota", style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.weight(1f))
+        // La animación sigue al estado: esFavorito dice a dónde hay que llegar
+        // y Compose calcula los valores intermedios. Nada de esto guarda si es favorito
+        val escala by animateFloatAsState(
+            targetValue = if (esFavorito) 1.25f else 1f,
+            animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+            label = "escalaFavorito"
+        )
+        val color by animateColorAsState(
+            targetValue = if (esFavorito) MaterialTheme.colorScheme.error
+            else MaterialTheme.colorScheme.onSurfaceVariant,
+            label = "colorFavorito"
+        )
         IconToggleButton(checked = esFavorito, onCheckedChange = { onFavoritoClick() }) {
             Icon(
                 painter = painterResource(
@@ -152,8 +170,12 @@ fun FilaValoracion(
                 contentDescription = stringResource(
                     if (esFavorito) R.string.quitar_favorito else R.string.marcar_favorito
                 ),
-                tint = if (esFavorito) MaterialTheme.colorScheme.error
-                else MaterialTheme.colorScheme.onSurfaceVariant
+                tint = color,
+                // graphicsLayer transforma el dibujo ya hecho: no recoloca a los vecinos
+                modifier = Modifier.graphicsLayer {
+                    scaleX = escala
+                    scaleY = escala
+                }
             )
         }
     }

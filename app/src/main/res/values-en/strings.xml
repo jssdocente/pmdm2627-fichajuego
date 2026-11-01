@@ -41,4 +41,13 @@
     <string name="detalle_genero">Genre</string>
     <string name="detalle_anio">Release year</string>
     <string name="detalle_nota">Average rating</string>
+
+    <!-- Pestañas y estadísticas -->
+    <string name="pestana_biblioteca">Library</string>
+    <string name="pestana_estadisticas">Stats</string>
+    <string name="est_partidas">Games played</string>
+    <string name="est_juegos">Games in the library</string>
+    <string name="est_nota_media">Average rating</string>
+    <string name="est_mas_jugado">Most played</string>
+    <string name="est_sin_partidas">You haven\'t played any games yet</string>
 </resources>

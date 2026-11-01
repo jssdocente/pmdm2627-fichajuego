@@ -41,4 +41,13 @@
     <string name="detalle_genero">Género</string>
     <string name="detalle_anio">Año de lanzamiento</string>
     <string name="detalle_nota">Nota media</string>
+
+    <!-- Pestañas y estadísticas -->
+    <string name="pestana_biblioteca">Biblioteca</string>
+    <string name="pestana_estadisticas">Estadísticas</string>
+    <string name="est_partidas">Partidas jugadas</string>
+    <string name="est_juegos">Juegos en la biblioteca</string>
+    <string name="est_nota_media">Nota media</string>
+    <string name="est_mas_jugado">El más jugado</string>
+    <string name="est_sin_partidas">Todavía no has jugado ninguna partida</string>
 </resources>
