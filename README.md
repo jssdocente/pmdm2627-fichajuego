@@ -17,6 +17,7 @@ Cada sesión tiene dos *tags*: el punto de partida (`-inicio`) y el resultado al
 | 3.02 · Componentes interactivos | `s3.02-inicio` | `s3.02-fin` |
 | 3.03 · Navigation 3 (I) | `s3.03-inicio` | `s3.03-fin` |
 | 3.04 · Navigation 3 (II) y edge-to-edge | `s3.04-inicio` | `s3.04-fin` |
+| 3.05 · ViewModel y UiState (I) | `s3.05-inicio` | `s3.05-fin` |
 
 ```bash
 git clone <url-del-repositorio> fichajuego
