@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pmdm.fichajuego.R
-import com.pmdm.fichajuego.ui.Cronometro
 import com.pmdm.fichajuego.ui.theme.FichaJuegoTheme
 
 /**
@@ -29,17 +28,14 @@ import com.pmdm.fichajuego.ui.theme.FichaJuegoTheme
 @Composable
 fun TarjetaCronometro(
     cronometro: Cronometro,
-    juegoId: Int,
     onEmpezar: () -> Unit,
     onPausar: () -> Unit,
     onTerminar: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val esteJuego = cronometro.juegoId == juegoId
-    val otroJuegoEnCurso = cronometro.juegoId != null && !esteJuego
-    val enMarcha = esteJuego && cronometro.enMarcha
-    val guardando = esteJuego && cronometro.guardando
-    val segundos = if (esteJuego) cronometro.segundos else 0
+    val enMarcha = cronometro.enMarcha
+    val guardando = cronometro.guardando
+    val segundos = cronometro.segundos
 
     // El color del tiempo sigue al estado, igual que el favorito de la ficha
     val colorTiempo by animateColorAsState(
@@ -64,14 +60,11 @@ fun TarjetaCronometro(
             if (guardando) {
                 Text(stringResource(R.string.crono_guardando))
             }
-            if (otroJuegoEnCurso) {
-                Text(stringResource(R.string.crono_otro_juego))
-            }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(
                     onClick = if (enMarcha) onPausar else onEmpezar,
-                    // Bloqueo: durante la espera, o con otra sesión abierta, no se puede pulsar
-                    enabled = !guardando && !otroJuegoEnCurso
+                    // Bloqueo: durante la espera no se puede pulsar
+                    enabled = !guardando
                 ) {
                     Text(
                         stringResource(
@@ -85,7 +78,7 @@ fun TarjetaCronometro(
                 }
                 OutlinedButton(
                     onClick = onTerminar,
-                    enabled = esteJuego && !guardando
+                    enabled = (enMarcha || segundos > 0) && !guardando
                 ) {
                     Text(stringResource(R.string.crono_terminar))
                 }
@@ -98,7 +91,7 @@ fun TarjetaCronometro(
 @Composable
 private fun TarjetaCronometroParadoPreview() {
     FichaJuegoTheme {
-        TarjetaCronometro(Cronometro(), juegoId = 1, onEmpezar = {}, onPausar = {}, onTerminar = {})
+        TarjetaCronometro(Cronometro(), onEmpezar = {}, onPausar = {}, onTerminar = {})
     }
 }
 
@@ -107,8 +100,8 @@ private fun TarjetaCronometroParadoPreview() {
 private fun TarjetaCronometroEnMarchaPreview() {
     FichaJuegoTheme {
         TarjetaCronometro(
-            Cronometro(juegoId = 1, segundos = 75, enMarcha = true),
-            juegoId = 1, onEmpezar = {}, onPausar = {}, onTerminar = {}
+            Cronometro(segundos = 75, enMarcha = true),
+            onEmpezar = {}, onPausar = {}, onTerminar = {}
         )
     }
 }
@@ -118,8 +111,8 @@ private fun TarjetaCronometroEnMarchaPreview() {
 private fun TarjetaCronometroGuardandoPreview() {
     FichaJuegoTheme {
         TarjetaCronometro(
-            Cronometro(juegoId = 1, segundos = 75, guardando = true),
-            juegoId = 1, onEmpezar = {}, onPausar = {}, onTerminar = {}
+            Cronometro(segundos = 75, guardando = true),
+            onEmpezar = {}, onPausar = {}, onTerminar = {}
         )
     }
 }

@@ -21,29 +21,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pmdm.fichajuego.R
-import com.pmdm.fichajuego.model.Juego
 import com.pmdm.fichajuego.model.catalogo
 import com.pmdm.fichajuego.ui.theme.FichaJuegoTheme
 import java.util.Locale
 
 /**
- * Resumen de la biblioteca. No guarda nada: todo se calcula a partir de los juegos
- * y las partidas que recibe, así que siempre está al día.
+ * Resumen de la biblioteca. Ya no calcula nada: recibe el estado calculado
+ * por EstadisticasViewModel y solo lo pinta.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EstadisticasScreen(
-    juegos: List<Juego>,
-    partidas: Map<Int, Int>,
+    estado: EstadisticasUiState,
     onJuegoClick: (juegoId: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val totalPartidas = partidas.values.sum()
-    val notaMedia = juegos.map { it.nota }.average()
-    // El más jugado: solo si hay alguna partida
-    val masJugado = juegos
-        .filter { (partidas[it.id] ?: 0) > 0 }
-        .maxByOrNull { partidas[it.id] ?: 0 }
+    val masJugado = estado.masJugado
 
     Scaffold(
         modifier = modifier,
@@ -68,16 +61,16 @@ fun EstadisticasScreen(
             ElevatedCard(modifier = Modifier.fillMaxWidth()) {
                 ListItem(
                     overlineContent = { Text(stringResource(R.string.est_partidas)) },
-                    headlineContent = { Text("$totalPartidas", style = MaterialTheme.typography.headlineSmall) }
+                    headlineContent = { Text("${estado.totalPartidas}", style = MaterialTheme.typography.headlineSmall) }
                 )
                 ListItem(
                     overlineContent = { Text(stringResource(R.string.est_juegos)) },
-                    headlineContent = { Text("${juegos.size}", style = MaterialTheme.typography.headlineSmall) }
+                    headlineContent = { Text("${estado.numeroJuegos}", style = MaterialTheme.typography.headlineSmall) }
                 )
                 ListItem(
                     overlineContent = { Text(stringResource(R.string.est_nota_media)) },
                     headlineContent = {
-                        Text(String.format(Locale.getDefault(), "%.2f", notaMedia), style = MaterialTheme.typography.headlineSmall)
+                        Text(String.format(Locale.getDefault(), "%.2f", estado.notaMedia), style = MaterialTheme.typography.headlineSmall)
                     }
                 )
             }
@@ -94,7 +87,7 @@ fun EstadisticasScreen(
                     ListItem(
                         headlineContent = { Text(masJugado.titulo) },
                         supportingContent = {
-                            Text(stringResource(R.string.partidas_jugadas, partidas[masJugado.id] ?: 0))
+                            Text(stringResource(R.string.partidas_jugadas, estado.partidasMasJugado))
                         }
                     )
                 }
@@ -107,6 +100,15 @@ fun EstadisticasScreen(
 @Composable
 private fun EstadisticasScreenPreview() {
     FichaJuegoTheme {
-        EstadisticasScreen(juegos = catalogo, partidas = mapOf(1 to 3, 4 to 5), onJuegoClick = {})
+        EstadisticasScreen(
+            estado = EstadisticasUiState(
+                totalPartidas = 8,
+                numeroJuegos = 6,
+                notaMedia = 4.65,
+                masJugado = catalogo[3],
+                partidasMasJugado = 5
+            ),
+            onJuegoClick = {}
+        )
     }
 }

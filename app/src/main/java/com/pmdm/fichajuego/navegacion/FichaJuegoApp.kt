@@ -14,11 +14,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberDecoratedNavEntries
@@ -27,27 +29,23 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.pmdm.fichajuego.ui.biblioteca.BibliotecaScreen
 import com.pmdm.fichajuego.ui.detalle.DetalleJuegoScreen
-import com.pmdm.fichajuego.ui.FichaJuegoViewModel
+import com.pmdm.fichajuego.FichaJuegoApplication
+import com.pmdm.fichajuego.ui.biblioteca.BibliotecaViewModel
+import com.pmdm.fichajuego.ui.detalle.DetalleViewModel
 import com.pmdm.fichajuego.ui.estadisticas.EstadisticasScreen
+import com.pmdm.fichajuego.ui.estadisticas.EstadisticasViewModel
 
 /**
- * Raíz de la app: la barra inferior y una pila por pestaña.
+ * Raíz de la app: la barra inferior, una pila por pestaña y un ViewModel por pantalla.
  *
- * Los juegos y las partidas ya no viven aquí, sino en FichaJuegoViewModel:
- * este composable solo lee su estado y le pasa los eventos de las pantallas.
+ * Los datos viven en el repositorio, que se crea una sola vez en FichaJuegoApplication.
+ * Cada entrada crea el ViewModel de su pantalla pasándole el repositorio.
  * Es el único sitio que toca las pilas: las pantallas solo reciben lambdas.
  */
 @Composable
-fun FichaJuegoApp(viewModel: FichaJuegoViewModel = viewModel()) {
-    // State down: cada vez que el ViewModel emite un estado nuevo, se recompone
-    val estado by viewModel.uiState.collectAsStateWithLifecycle()
-
-    // Al salir con el botón de inicio el cronómetro se para, y al volver continúa.
-    // Se ejecuta al entrar en estado RESUMED y onPauseOrDispose, al salir de él
-    LifecycleResumeEffect(Unit) {
-        viewModel.onVolverALaApp()
-        onPauseOrDispose { viewModel.onSalirDeLaApp() }
-    }
+fun FichaJuegoApp() {
+    // La misma instancia para toda la app: la crea FichaJuegoApplication al arrancar
+    val repositorio = (LocalContext.current.applicationContext as FichaJuegoApplication).repositorio
 
     var seleccionada by rememberSaveable { mutableStateOf(Pestana.Inicio) }
 
@@ -71,7 +69,9 @@ fun FichaJuegoApp(viewModel: FichaJuegoViewModel = viewModel()) {
 
     val proveedor = entryProvider {
         entry<Biblioteca> {
-            // Events up: las pantallas avisan y el ViewModel decide qué cambia
+            // viewModel { }: la primera vez lo crea con esta lambda; después devuelve el mismo
+            val viewModel = viewModel { BibliotecaViewModel(repositorio) }
+            val estado by viewModel.uiState.collectAsStateWithLifecycle()
             BibliotecaScreen(
                 juegos = estado.juegos,
                 partidas = estado.partidas,
@@ -82,20 +82,30 @@ fun FichaJuegoApp(viewModel: FichaJuegoViewModel = viewModel()) {
             )
         }
         entry<Estadisticas> {
+            val viewModel = viewModel { EstadisticasViewModel(repositorio) }
+            val estado by viewModel.uiState.collectAsStateWithLifecycle()
             EstadisticasScreen(
-                juegos = estado.juegos,
-                partidas = estado.partidas,
+                estado = estado,
                 onJuegoClick = { id -> navegar(DetalleJuego(juegoId = id)) }
             )
         }
         // La clave trae los argumentos: clave.juegoId
         entry<DetalleJuego> { clave ->
+            // Cada detalle abierto tiene SU ViewModel, creado con el id de su clave
+            val viewModel = viewModel { DetalleViewModel(clave.juegoId, repositorio) }
+            val estado by viewModel.uiState.collectAsStateWithLifecycle()
+            // Al salir con el botón de inicio el cronómetro se para, y al volver continúa.
+            // Se ejecuta al entrar en estado RESUMED y onPauseOrDispose, al salir de él
+            LifecycleResumeEffect(viewModel) {
+                viewModel.onVolverALaApp()
+                onPauseOrDispose { viewModel.onSalirDeLaApp() }
+            }
             DetalleJuegoScreen(
-                juego = estado.juego(clave.juegoId),
-                partidas = estado.partidasDe(clave.juegoId),
+                juego = estado.juego,
+                partidas = estado.partidas,
                 cronometro = estado.cronometro,
-                onSumarPartida = { viewModel.onSumarPartida(clave.juegoId) },
-                onEmpezar = { viewModel.onEmpezar(clave.juegoId) },
+                onSumarPartida = viewModel::onSumarPartida,
+                onEmpezar = viewModel::onEmpezar,
                 onPausar = viewModel::onPausar,
                 onTerminar = viewModel::onTerminar,
                 onVolver = ::volver
@@ -103,12 +113,16 @@ fun FichaJuegoApp(viewModel: FichaJuegoViewModel = viewModel()) {
         }
     }
 
-    // Cada pila con SU PROPIO decorador: conserva el estado de sus pantallas
-    // (rememberSaveable) aunque su pestaña no se esté mostrando
+    // Cada pila con SUS PROPIOS decoradores:
+    // 1. conserva el rememberSaveable de sus pantallas aunque su pestaña no se muestre
+    // 2. da a cada entrada su propio almacén de ViewModels, que se vacía al sacarla de la pila
     val entradasPorPestana = pilas.mapValues { (_, pila) ->
         rememberDecoratedNavEntries(
             backStack = pila,
-            entryDecorators = listOf(rememberSaveableStateHolderNavEntryDecorator()),
+            entryDecorators = listOf(
+                rememberSaveableStateHolderNavEntryDecorator(),
+                rememberViewModelStoreNavEntryDecorator()
+            ),
             entryProvider = proveedor
         )
     }

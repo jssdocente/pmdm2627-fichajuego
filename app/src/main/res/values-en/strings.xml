@@ -58,5 +58,4 @@
     <string name="crono_continuar">Resume</string>
     <string name="crono_terminar">Finish</string>
     <string name="crono_guardando">Saving the session…</string>
-    <string name="crono_otro_juego">There is already a session open with another game</string>
 </resources>

@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import com.pmdm.fichajuego.R
 import com.pmdm.fichajuego.model.Juego
 import com.pmdm.fichajuego.model.juegoEjemplo
-import com.pmdm.fichajuego.ui.Cronometro
 import com.pmdm.fichajuego.ui.ficha.FilaPartidas
 import com.pmdm.fichajuego.ui.theme.FichaJuegoTheme
 
@@ -120,7 +119,6 @@ fun DetalleJuegoScreen(
             FilaPartidas(partidas = partidas, onSumarPartida = onSumarPartida)
             TarjetaCronometro(
                 cronometro = cronometro,
-                juegoId = juego.id,
                 onEmpezar = onEmpezar,
                 onPausar = onPausar,
                 onTerminar = onTerminar

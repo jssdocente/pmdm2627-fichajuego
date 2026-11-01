@@ -58,5 +58,4 @@
     <string name="crono_continuar">Continuar</string>
     <string name="crono_terminar">Terminar</string>
     <string name="crono_guardando">Guardando la partida…</string>
-    <string name="crono_otro_juego">Ya hay una sesión abierta con otro juego</string>
 </resources>
