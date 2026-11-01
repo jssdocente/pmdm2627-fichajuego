@@ -40,6 +40,8 @@ import com.pmdm.fichajuego.ui.theme.FichaJuegoTheme
  * Ficha completa de un juego. Es *stateless*: recibe el estado como parámetros
  * (estado hacia abajo) y avisa de los clics con lambdas (eventos hacia arriba).
  *
+ * Al pulsar la tarjeta avisa con onClick: la ficha no sabe que eso abre el detalle.
+ *
  * Árbol: ElevatedCard → Column → [Portada (Box), Text, Text, FilaValoracion (Row), FilaPartidas (Row)]
  */
 @Composable
@@ -49,10 +51,12 @@ fun FichaJuego(
     partidas: Int,
     onFavoritoClick: () -> Unit,
     onSumarPartida: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // ElevatedCard toma del tema el color (surfaceContainerLow), la sombra y la forma (shapes.medium)
-    ElevatedCard(modifier = modifier.fillMaxWidth()) {
+    // ElevatedCard toma del tema el color (surfaceContainerLow), la sombra y la forma (shapes.medium).
+    // Con onClick, toda la tarjeta se puede pulsar (con su efecto de onda)
+    ElevatedCard(onClick = onClick, modifier = modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -185,6 +189,7 @@ private fun FichaJuegoPreview() {
             partidas = 0,
             onFavoritoClick = {},
             onSumarPartida = {},
+            onClick = {},
             modifier = Modifier.padding(16.dp)
         )
     }
@@ -200,6 +205,7 @@ private fun FichaJuegoOscuroPreview() {
             partidas = 12,
             onFavoritoClick = {},
             onSumarPartida = {},
+            onClick = {},
             modifier = Modifier.padding(16.dp)
         )
     }
@@ -215,6 +221,7 @@ private fun FichaJuegoSinNovedadPreview() {
             partidas = 3,
             onFavoritoClick = {},
             onSumarPartida = {},
+            onClick = {},
             modifier = Modifier.padding(16.dp)
         )
     }

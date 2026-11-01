@@ -15,6 +15,7 @@ Cada sesión tiene dos *tags*: el punto de partida (`-inicio`) y el resultado al
 | 2.03 · Imágenes, iconos y recursos (estudio autónomo) | `s2.03-inicio` | `s2.03-fin` |
 | 3.01 · Tema de Material 3, Scaffold y listas | `s3.01-inicio` | `s3.01-fin` |
 | 3.02 · Componentes interactivos | `s3.02-inicio` | `s3.02-fin` |
+| 3.03 · Navigation 3 (I) | `s3.03-inicio` | `s3.03-fin` |
 
 ```bash
 git clone <url-del-repositorio> fichajuego

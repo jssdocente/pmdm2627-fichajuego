@@ -25,7 +25,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -42,16 +41,21 @@ import com.pmdm.fichajuego.ui.theme.FichaJuegoTheme
 /**
  * Pantalla principal: barra superior + lista perezosa con todo el catálogo.
  *
- * Las partidas de cada juego viven aquí, en un mapa id → partidas, porque el total las necesita.
+ * Los juegos y las partidas llegan desde FichaJuegoApp, porque también los usa el detalle.
+ * Aquí solo queda el estado de la propia pantalla: el orden, la hoja y el diálogo.
  * El favorito sigue dentro de cada FichaJuegoScreen: por eso la lista necesita key.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BibliotecaScreen(modifier: Modifier = Modifier) {
-    // remember y no rememberSaveable: una lista de Juego no se puede guardar en el Bundle.
-    // Al girar el móvil se pierden los juegos añadidos (lo resolveremos con un ViewModel).
-    var juegos by remember { mutableStateOf(catalogo) }
-    var partidas by rememberSaveable { mutableStateOf(mapOf<Int, Int>()) }
+fun BibliotecaScreen(
+    juegos: List<Juego>,
+    partidas: Map<Int, Int>,
+    onSumarPartida: (juegoId: Int) -> Unit,
+    onReiniciarPartidas: () -> Unit,
+    onAnadirJuego: (titulo: String, genero: String, anio: Int, nota: Double) -> Unit,
+    onJuegoClick: (juegoId: Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     var ordenarPorNota by rememberSaveable { mutableStateOf(false) }
     var mostrarFormulario by rememberSaveable { mutableStateOf(false) }
     var confirmarReinicio by rememberSaveable { mutableStateOf(false) }
@@ -121,9 +125,8 @@ fun BibliotecaScreen(modifier: Modifier = Modifier) {
                 FichaJuegoScreen(
                     juego = juego,
                     partidas = partidas[juego.id] ?: 0,
-                    onSumarPartida = {
-                        partidas = partidas + (juego.id to (partidas[juego.id] ?: 0) + 1)
-                    }
+                    onSumarPartida = { onSumarPartida(juego.id) },
+                    onClick = { onJuegoClick(juego.id) }
                 )
             }
         }
@@ -142,16 +145,7 @@ fun BibliotecaScreen(modifier: Modifier = Modifier) {
                     .navigationBarsPadding()
                     .imePadding(),
                 onGuardar = { titulo, genero, anio, nota ->
-                    val nuevo = Juego(
-                        id = (juegos.maxOfOrNull { it.id } ?: 0) + 1,
-                        titulo = titulo,
-                        genero = genero,
-                        anio = anio,
-                        nota = nota,
-                        portada = R.drawable.img_portada_generica,
-                        esNovedad = true
-                    )
-                    juegos = listOf(nuevo) + juegos
+                    onAnadirJuego(titulo, genero, anio, nota)
                     mostrarFormulario = false
                 },
                 onCancelar = { mostrarFormulario = false }
@@ -162,7 +156,7 @@ fun BibliotecaScreen(modifier: Modifier = Modifier) {
     if (confirmarReinicio) {
         DialogoReiniciarPartidas(
             onConfirmar = {
-                partidas = emptyMap()
+                onReiniciarPartidas()
                 confirmarReinicio = false
             },
             onCancelar = { confirmarReinicio = false }
@@ -198,7 +192,14 @@ private fun DialogoReiniciarPartidas(
 @Composable
 private fun BibliotecaScreenPreview() {
     FichaJuegoTheme {
-        BibliotecaScreen()
+        BibliotecaScreen(
+            juegos = catalogo,
+            partidas = mapOf(1 to 3),
+            onSumarPartida = {},
+            onReiniciarPartidas = {},
+            onAnadirJuego = { _, _, _, _ -> },
+            onJuegoClick = {}
+        )
     }
 }
 

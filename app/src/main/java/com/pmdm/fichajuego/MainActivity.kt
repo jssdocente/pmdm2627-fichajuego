@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.pmdm.fichajuego.ui.biblioteca.BibliotecaScreen
+import com.pmdm.fichajuego.navegacion.FichaJuegoApp
 import com.pmdm.fichajuego.ui.theme.FichaJuegoTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,8 +13,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FichaJuegoTheme {
-                // El Scaffold vive ahora dentro de BibliotecaScreen: cada pantalla tiene su barra
-                BibliotecaScreen()
+                // FichaJuegoApp decide qué pantalla se ve según la pila de navegación
+                FichaJuegoApp()
             }
         }
     }

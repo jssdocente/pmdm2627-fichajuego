@@ -24,6 +24,7 @@ fun FichaJuegoScreen(
     juego: Juego,
     partidas: Int,
     onSumarPartida: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var esFavorito by rememberSaveable { mutableStateOf(false) }
@@ -34,6 +35,7 @@ fun FichaJuegoScreen(
         partidas = partidas,
         onFavoritoClick = { esFavorito = !esFavorito },
         onSumarPartida = onSumarPartida,
+        onClick = onClick,
         modifier = modifier
     )
 }
@@ -47,6 +49,7 @@ private fun FichaJuegoScreenPreview() {
             juego = juegoEjemplo,
             partidas = 0,
             onSumarPartida = {},
+            onClick = {},
             modifier = Modifier.padding(16.dp)
         )
     }
