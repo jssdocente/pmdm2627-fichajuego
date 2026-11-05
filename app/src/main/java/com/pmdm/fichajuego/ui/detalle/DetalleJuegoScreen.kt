@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.pmdm.fichajuego.R
 import com.pmdm.fichajuego.model.Juego
 import com.pmdm.fichajuego.model.juegoEjemplo
+import com.pmdm.fichajuego.ui.Cronometro
 import com.pmdm.fichajuego.ui.ficha.FilaPartidas
 import com.pmdm.fichajuego.ui.theme.FichaJuegoTheme
 
@@ -44,7 +45,11 @@ import com.pmdm.fichajuego.ui.theme.FichaJuegoTheme
 fun DetalleJuegoScreen(
     juego: Juego?,
     partidas: Int,
+    cronometro: Cronometro,
     onSumarPartida: () -> Unit,
+    onEmpezar: () -> Unit,
+    onPausar: () -> Unit,
+    onTerminar: () -> Unit,
     onVolver: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -113,6 +118,13 @@ fun DetalleJuegoScreen(
             )
             // Reutilizamos la fila de la ficha: el contador es el mismo que en la lista
             FilaPartidas(partidas = partidas, onSumarPartida = onSumarPartida)
+            TarjetaCronometro(
+                cronometro = cronometro,
+                juegoId = juego.id,
+                onEmpezar = onEmpezar,
+                onPausar = onPausar,
+                onTerminar = onTerminar
+            )
         }
     }
 }
@@ -121,7 +133,10 @@ fun DetalleJuegoScreen(
 @Composable
 private fun DetalleJuegoScreenPreview() {
     FichaJuegoTheme {
-        DetalleJuegoScreen(juego = juegoEjemplo, partidas = 3, onSumarPartida = {}, onVolver = {})
+        DetalleJuegoScreen(
+            juego = juegoEjemplo, partidas = 3, cronometro = Cronometro(),
+            onSumarPartida = {}, onEmpezar = {}, onPausar = {}, onTerminar = {}, onVolver = {}
+        )
     }
 }
 
@@ -129,6 +144,9 @@ private fun DetalleJuegoScreenPreview() {
 @Composable
 private fun DetalleJuegoNoEncontradoPreview() {
     FichaJuegoTheme {
-        DetalleJuegoScreen(juego = null, partidas = 0, onSumarPartida = {}, onVolver = {})
+        DetalleJuegoScreen(
+            juego = null, partidas = 0, cronometro = Cronometro(),
+            onSumarPartida = {}, onEmpezar = {}, onPausar = {}, onTerminar = {}, onVolver = {}
+        )
     }
 }

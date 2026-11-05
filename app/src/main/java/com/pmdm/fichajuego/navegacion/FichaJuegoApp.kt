@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
@@ -40,6 +41,13 @@ import com.pmdm.fichajuego.ui.estadisticas.EstadisticasScreen
 fun FichaJuegoApp(viewModel: FichaJuegoViewModel = viewModel()) {
     // State down: cada vez que el ViewModel emite un estado nuevo, se recompone
     val estado by viewModel.uiState.collectAsStateWithLifecycle()
+
+    // Al salir con el botón de inicio el cronómetro se para, y al volver continúa.
+    // Se ejecuta al entrar en estado RESUMED y onPauseOrDispose, al salir de él
+    LifecycleResumeEffect(Unit) {
+        viewModel.onVolverALaApp()
+        onPauseOrDispose { viewModel.onSalirDeLaApp() }
+    }
 
     var seleccionada by rememberSaveable { mutableStateOf(Pestana.Inicio) }
 
@@ -85,7 +93,11 @@ fun FichaJuegoApp(viewModel: FichaJuegoViewModel = viewModel()) {
             DetalleJuegoScreen(
                 juego = estado.juego(clave.juegoId),
                 partidas = estado.partidasDe(clave.juegoId),
+                cronometro = estado.cronometro,
                 onSumarPartida = { viewModel.onSumarPartida(clave.juegoId) },
+                onEmpezar = { viewModel.onEmpezar(clave.juegoId) },
+                onPausar = viewModel::onPausar,
+                onTerminar = viewModel::onTerminar,
                 onVolver = ::volver
             )
         }

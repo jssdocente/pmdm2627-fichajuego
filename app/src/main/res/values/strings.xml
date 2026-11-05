@@ -50,4 +50,13 @@
     <string name="est_nota_media">Nota media</string>
     <string name="est_mas_jugado">El más jugado</string>
     <string name="est_sin_partidas">Todavía no has jugado ninguna partida</string>
+
+    <!-- Cronómetro de la sesión de juego -->
+    <string name="crono_tiempo">%1$02d:%2$02d</string>
+    <string name="crono_empezar">Empezar a jugar</string>
+    <string name="crono_pausar">Pausar</string>
+    <string name="crono_continuar">Continuar</string>
+    <string name="crono_terminar">Terminar</string>
+    <string name="crono_guardando">Guardando la partida…</string>
+    <string name="crono_otro_juego">Ya hay una sesión abierta con otro juego</string>
 </resources>
